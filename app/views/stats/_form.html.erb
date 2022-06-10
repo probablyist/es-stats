@@ -1,0 +1,52 @@
+<%= form_with(model: stat) do |form| %>
+  <% if stat.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(stat.errors.count, "error") %> prohibited this stat from being saved:</h2>
+
+      <ul>
+        <% stat.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :trading_day, style: "display: block" %>
+    <%= form.date_field :trading_day %>
+  </div>
+
+  <div>
+    <%= form.label :breach_onh, style: "display: block" %>
+    <%= form.text_field :breach_onh %>
+  </div>
+
+  <div>
+    <%= form.label :breach_onl, style: "display: block" %>
+    <%= form.text_field :breach_onl %>
+  </div>
+
+  <div>
+    <%= form.label :breach_fhh, style: "display: block" %>
+    <%= form.text_field :breach_fhh %>
+  </div>
+
+  <div>
+    <%= form.label :breach_fhl, style: "display: block" %>
+    <%= form.text_field :breach_fhl %>
+  </div>
+
+  <div>
+    <%= form.label :breach_ah, style: "display: block" %>
+    <%= form.text_field :breach_ah %>
+  </div>
+
+  <div>
+    <%= form.label :breach_al, style: "display: block" %>
+    <%= form.text_field :breach_al %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
