@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_10_013034) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_10_020644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "price_data", force: :cascade do |t|
+    t.datetime "date_time", null: false
+    t.float "open", null: false
+    t.float "high", null: false
+    t.float "low", null: false
+    t.float "close", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date_time"], name: "index_price_data_on_date_time", unique: true
+  end
 
   create_table "stats", force: :cascade do |t|
     t.date "trading_day", null: false
