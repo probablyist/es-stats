@@ -92,11 +92,23 @@ class PriceData < ApplicationRecord
   end
 
   def self.set_onh
-
+    PriceData.rth_only.each do |d|
+      PriceData.on_only.group(:trading_day).maximum(:high).each do |k, v|
+        if d.trading_day == k
+          d.update(onh: v)
+        end
+      end
+    end
   end
 
   def self.set_onl
-
+    PriceData.rth_only.each do |d|
+      PriceData.on_only.group(:trading_day).minimum(:low).each do |k, v|
+        if d.trading_day == k
+          d.update(onl: v)
+        end
+      end
+    end
   end
 
   def self.set_fhh
