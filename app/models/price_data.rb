@@ -17,16 +17,27 @@ class PriceData < ApplicationRecord
     end
   end
 
+  # Sets overnight trading periods to date of next regular trading session
   def self.set_trading_day
+    close_rth = Time.parse("16:30PM").seconds_since_midnight
 
+    PriceData.all.each do |dt|
+      time = dt.date_time.seconds_since_midnight
+      if time <= close_rth
+        dt.update(trading_day: dt.date_time.to_date)
+      else
+        dt.update(trading_day: (dt.date_time.to_date + 1.day))
+      end
+    end
   end
 
+  # Sets trading_session to RTH or ON based on open and close of regular trading session
   def self.set_trading_session
     open_rth = Time.parse("8:30AM").seconds_since_midnight
     close_rth = Time.parse("16:30PM").seconds_since_midnight
     PriceData.all.each do |dt|
-      trading_day = dt.date_time.seconds_since_midnight
-      if trading_day >= open_rth && trading_day <= close_rth
+      time = dt.date_time.seconds_since_midnight
+      if time >= open_rth && time <= close_rth
         dt.update(trading_session: "RTH")
       else
         dt.update(trading_session: "ON")
