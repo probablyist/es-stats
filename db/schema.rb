@@ -24,7 +24,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_11_002341) do
     t.datetime "updated_at", null: false
     t.date "trading_day"
     t.string "trading_session"
-    t.string "period"
+    t.integer "period"
     t.float "onh"
     t.float "onl"
     t.float "fhh"
