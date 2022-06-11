@@ -11,6 +11,9 @@ class PriceData < ApplicationRecord
     set_trading_day
     set_trading_session
     set_fhh
+    set_fhl
+    set_onh
+    set_onl
   end
 
   def self.load_csv_to_db
