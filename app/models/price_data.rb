@@ -3,8 +3,19 @@ class PriceData < ApplicationRecord
   enum :period, %i[A B C D E F G H I J K L M N O]
 
   scope :rth_only, -> { where(trading_session: "RTH") }
+  scope :on_only, -> { where(trading_session: "ON") }
+  scope :fh_only, -> { where(period: ["A", "B"]).group(:trading_day) }
+
+  def self.download_update_all
+    load_csv_to_db
+    set_trading_day
+    set_trading_session
+    set_fhh
+  end
 
   def self.load_csv_to_db
+    require 'csv'
+    require 'uri'
     url = URI(ENV["es_data_sheet"])
     body = url.read
 
@@ -89,10 +100,22 @@ class PriceData < ApplicationRecord
   end
 
   def self.set_fhh
-
+    PriceData.rth_only.each do |d|
+      PriceData.fh_only.maximum(:high).each do |k, v|
+        if d.trading_day == k
+          d.update(fhh: v)
+        end
+      end
+    end
   end
 
   def self.set_fhl
-
+    PriceData.rth_only.each do |d|
+      PriceData.fh_only.minimum(:low).each do |k, v|
+        if d.trading_day == k
+          d.update(fhl: v)
+        end
+      end
+    end
   end
 end
