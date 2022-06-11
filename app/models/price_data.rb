@@ -1,6 +1,8 @@
 class PriceData < ApplicationRecord
 
-  enum :period, %i[A B C D E F G H I J K]
+  enum :period, %i[A B C D E F G H I J K L M N O]
+
+  scope :rth_only, -> { where(trading_session: "RTH") }
 
   def self.load_csv_to_db
     url = URI(ENV["es_data_sheet"])
@@ -45,9 +47,36 @@ class PriceData < ApplicationRecord
     end
   end
 
+  # Sets period label of RTH 30minute blocks
   def self.set_period
+    open_rth = Time.parse("8:30AM").seconds_since_midnight
+    thirty = Time.parse("0:30AM").seconds_since_midnight
 
+    periods = periods = {
+      "A"=>open_rth,
+      "B"=>(open_rth += thirty),
+      "C"=>(open_rth += thirty),
+      "D"=>(open_rth += thirty),
+      "E"=>(open_rth += thirty),
+      "F"=>(open_rth += thirty),
+      "G"=>(open_rth += thirty),
+      "H"=>(open_rth += thirty),
+      "I"=>(open_rth += thirty),
+      "J"=>(open_rth += thirty),
+      "K"=>(open_rth += thirty),
+      "L"=>(open_rth += thirty),
+      "M"=>(open_rth += thirty),
+      "N"=>(open_rth += thirty),
+      "O"=>(open_rth += thirty)
+    }
 
+    PriceData.rth_only.each do |p|
+      periods.each do |k, v|
+        if p.date_time.seconds_since_midnight == v
+          p.update(period: k)
+        end
+      end
+    end
 
   end
 
