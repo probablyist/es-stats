@@ -66,7 +66,7 @@ class PriceData < ApplicationRecord
     open_rth = Time.parse("8:30AM").seconds_since_midnight
     thirty = Time.parse("0:30AM").seconds_since_midnight
 
-    periods = periods = {
+    periods = {
       "A"=>open_rth,
       "B"=>(open_rth += thirty),
       "C"=>(open_rth += thirty),
