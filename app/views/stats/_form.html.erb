@@ -1,3 +1,8 @@
+<%= form_with(model: price_data) do |f| %>
+  <%= f.date_field :trading_day %>
+
+<% end %>
+
 <%= form_with(model: stat) do |form| %>
   <% if stat.errors.any? %>
     <div style="color: red">

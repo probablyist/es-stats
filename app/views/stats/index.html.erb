@@ -2,13 +2,27 @@
 
 <h1>Stats</h1>
 
+
+
+
 <div id="stats">
-  <% @stats.each do |stat| %>
-    <%= render stat %>
-    <p>
-      <%= link_to "Show this stats", stat %>
-    </p>
-  <% end %>
+  <table>
+
+  <thead>
+    <tr>
+      <th>Trading day</th>
+      <th>Breach onh</th>
+      <th>Breach onl</th>
+      <th>Breach fhh</th>
+      <th>Breach fhl</th>
+      <th>each ah</th>
+      <th>Breach al</th>
+    </tr>
+  </thead>
+    <% @stats.each do |stat| %>
+      <%= render stat %>
+    <% end %>
+  </table>
 </div>
 
 <%= link_to "New stats", new_stat_path %>

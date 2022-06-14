@@ -1,13 +1,15 @@
 class PriceData < ApplicationRecord
-
+belongs_to :stats
   enum :period, %i[A B C D E F G H I J K L M N O]
 
   scope :rth_only, -> { where(trading_session: "RTH") }
   scope :on_only, -> { where(trading_session: "ON") }
   scope :fh_only, -> { where(period: ["A", "B"]).group(:trading_day) }
+  scope :a_period, -> { where(period: "A") }
+  scope :b_period, -> { where(period: "B") }
 
   def self.download_update_all
-    load_csv_to_db
+    # load_csv_to_db
     set_trading_day
     set_trading_session
     set_fhh

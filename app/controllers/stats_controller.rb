@@ -3,7 +3,7 @@ class StatsController < ApplicationController
 
   # GET /stats or /stats.json
   def index
-    @stats = Stats.all
+    @stats = Stats.all.order(:trading_day)
   end
 
   # GET /stats/1 or /stats/1.json
