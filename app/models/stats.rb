@@ -21,16 +21,29 @@ class Stats < ApplicationRecord
     }
   end
 
+  @total_days = Stats.all.size
+  def self.all_stats_raw
+    raw = {
+      on: count_breach_on,
+      fh: count_breach_fh,
+      a: count_breach_a
+    }
+  end
+
+
+
   def self.count_breach_fh
       high = period_hash.except(:A, :B)
       low = period_hash.except(:A, :B)
       either = period_hash.except(:A, :B)
-      both = 0
-      none = 0
+      x = {
+        both: 0,
+        none: 0
+      }
 
     Stats.all.each do |s|
       if s.breach_fhh.present? && s.breach_fhl.present?
-        both += 1
+        x[:both] += 1
         if s.breach_fhh < s.breach_fhl
           either[s.breach_fhh.to_sym] += 1
         else
@@ -43,16 +56,17 @@ class Stats < ApplicationRecord
         low[s.breach_fhl.to_sym] += 1
         either[s.breach_fhl.to_sym] += 1
       else
-        none += 1
+        x[:none] += 1
       end
     end
 
     breach_on = {
-      high: high,
-      low: low,
-      either: either,
-      both: both,
-      none: none
+      high_acc: hash_to_percentage(accumulate_periods(high)),
+      high: hash_to_percentage(high),
+      low_acc: hash_to_percentage(accumulate_periods(low)),
+      low: hash_to_percentage(low),
+      either: hash_to_percentage(either),
+      x: hash_to_percentage(x)
     }
   end
 
@@ -60,14 +74,16 @@ class Stats < ApplicationRecord
     high = period_hash
     low = period_hash
     either = period_hash
-    both = 0
-    none = 0
+    x = {
+      both: 0,
+      none: 0
+    }
 
   Stats.all.each do |s|
     sh = s.breach_onh
     sl = s.breach_onl
     if sh.present? && sl.present?
-        both += 1
+        x[:both] += 1
       high[sh.to_sym] += 1
       low[sl.to_sym] += 1
       if sh < sl
@@ -82,16 +98,20 @@ class Stats < ApplicationRecord
       low[sl.to_sym] += 1
       either[sl.to_sym] += 1
     else
-      none += 1
+      x[:none] += 1
     end
   end
 
+
+
+
   breach_on = {
-    high: high,
-    low: low,
-    either: either,
-    both: both,
-    none: none
+    high_acc: hash_to_percentage(accumulate_periods(high)),
+    high: hash_to_percentage(high),
+    low_acc: hash_to_percentage(accumulate_periods(low)),
+    low: hash_to_percentage(low),
+    either: hash_to_percentage(either),
+    x: hash_to_percentage(x)
   }
 end
 
@@ -117,15 +137,35 @@ def self.count_breach_a
 
   end
 
-  high = { count: high.size, avg: mean_ticks(high) }
-  low = { count: low.size, avg: mean_ticks(low) }
+  high = { count: percent_of_total(high.size), avg: mean_ticks(high) }
+  low = { count: percent_of_total(low.size), avg: mean_ticks(low) }
 
   breach_a = {
-    either: either,
-    both: both,
+    either: percent_of_total(either),
+    both: percent_of_total(both),
     high: high,
     low: low
   }
+end
+
+
+##### Helpers #####
+
+def self.hash_to_percentage(hash)
+  p hash
+  hash.each do |k, v|
+    hash[k] = percent_of_total(v) #unless hash[k].blank?
+  end
+  hash
+end
+
+def self.percent_of_total(num)
+  ActiveSupport::NumberHelper.number_to_percentage(num.to_f / @total_days * 100, precision: 2)
+end
+
+def self.accumulate_periods(hash)
+  sum = 0
+  hash.transform_values { |v| sum += v }
 end
 
 def self.mean_ticks(array)
