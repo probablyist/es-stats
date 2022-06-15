@@ -22,15 +22,14 @@ class Stats < ApplicationRecord
   end
 
   @total_days = Stats.all.size
-  def self.all_stats_raw
-    raw = {
+
+  def self.all_stats
+    all = {
       on: count_breach_on,
       fh: count_breach_fh,
-      a: count_breach_a
+      ab: count_breach_a
     }
   end
-
-
 
   def self.count_breach_fh
       high = period_hash.except(:A, :B)
@@ -65,6 +64,7 @@ class Stats < ApplicationRecord
       high: hash_to_percentage(high),
       low_acc: hash_to_percentage(accumulate_periods(low)),
       low: hash_to_percentage(low),
+      either_acc: hash_to_percentage(accumulate_periods(either)),
       either: hash_to_percentage(either),
       x: hash_to_percentage(x)
     }
@@ -110,6 +110,7 @@ class Stats < ApplicationRecord
     high: hash_to_percentage(high),
     low_acc: hash_to_percentage(accumulate_periods(low)),
     low: hash_to_percentage(low),
+    either_acc: hash_to_percentage(accumulate_periods(either)),
     either: hash_to_percentage(either),
     x: hash_to_percentage(x)
   }
