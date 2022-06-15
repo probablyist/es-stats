@@ -1,13 +1,13 @@
-<% @on = @stats_hash[:on] %>
+<% @fh = @stats_hash[:fh] %>
 <table>
   <thead>
     <th>Breach</th>
-    <% @on[:high].each do |k, v| %>
+    <% @fh[:high].each do |k, v| %>
       <th><%= k %></th>
     <% end %>
     <th>Max</th>
   </thead>
-  <% @on.except(:x).each do |key, value| %>
+  <% @fh.except(:x).each do |key, value| %>
     <tr>
       <td><%= key %></td>
       <% value.each do |k, v| %>
@@ -17,7 +17,7 @@
     </tr>
   <% end %>
   <table>
-    <% @on[:x].each do |k, v| %>
+    <% @fh[:x].each do |k, v| %>
       <tr><td><%= k %></td>
       <td><%= v %></td></tr>
     <% end %>

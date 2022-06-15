@@ -116,38 +116,75 @@ class Stats < ApplicationRecord
   }
 end
 
+# def self.count_breach_a
+#   either = 0
+#   both = 0
+#   high = []
+#   low = []
+
+#   Stats.all.each do |s|
+#     if s.breach_ah.present? && s.breach_al.present?
+#       either += 1
+#       both += 1
+#       high << s.breach_ah.to_f
+#       low << s.breach_al.to_f
+#     elsif s.breach_ah.present?
+#       either += 1
+#       high << s.breach_ah.to_f
+#     elsif s.breach_al.present?
+#       either += 1
+#       low << s.breach_al.to_f
+#     end
+
+#   end
+
+#   high = { count: percent_of_total(high.size), avg: mean_ticks(high) }
+#   low = { count: percent_of_total(low.size), avg: mean_ticks(low) }
+
+#   breach_a = {
+#     either: percent_of_total(either),
+#     both: percent_of_total(both),
+#     high: high,
+#     low: low
+#   }
+# end
+
 def self.count_breach_a
-  either = 0
-  both = 0
+  either = []
+  both = []
   high = []
   low = []
 
   Stats.all.each do |s|
     if s.breach_ah.present? && s.breach_al.present?
-      either += 1
-      both += 1
+      either << ((s.breach_ah.to_f + s.breach_al.to_f) / 2.0)
+      both << s.breach_ah.to_f
+      both << s.breach_al.to_f
       high << s.breach_ah.to_f
       low << s.breach_al.to_f
     elsif s.breach_ah.present?
-      either += 1
+      either << s.breach_ah.to_f
       high << s.breach_ah.to_f
     elsif s.breach_al.present?
-      either += 1
+      either << s.breach_al.to_f
       low << s.breach_al.to_f
     end
 
   end
-
+  p either
+  either = { count: percent_of_total(either.size), avg: mean_ticks(either) }
+  both = { count: percent_of_total(both.size), avg: mean_ticks(both) }
   high = { count: percent_of_total(high.size), avg: mean_ticks(high) }
   low = { count: percent_of_total(low.size), avg: mean_ticks(low) }
 
   breach_a = {
-    either: percent_of_total(either),
-    both: percent_of_total(both),
+    either: either,
+    both: both,
     high: high,
     low: low
   }
 end
+
 
 
 ##### Helpers #####
