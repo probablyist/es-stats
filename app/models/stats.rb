@@ -1,5 +1,6 @@
 class Stats < ApplicationRecord
   extend DataHash
+  extend PullStats
 
   has_many :price_data
 

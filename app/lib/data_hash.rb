@@ -37,4 +37,12 @@ module DataHash
       both: 0
     }
   end
+
+  # def empty_stat_hash
+  #   stats = {
+  #     period: empty_stat_hash_periods,
+  #     day: empty_stat_hash_days
+  #   }
+  # end
+
 end
