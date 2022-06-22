@@ -1,25 +1,7 @@
 class Stats < ApplicationRecord
-  has_many :price_data
+  extend DataHash
 
-  def self.period_hash
-    period_hash = {
-      A: 0,
-      B: 0,
-      C: 0,
-      D: 0,
-      E: 0,
-      F: 0,
-      G: 0,
-      H: 0,
-      I: 0,
-      J: 0,
-      K: 0,
-      L: 0,
-      M: 0,
-      N: 0,
-      O: 0
-    }
-  end
+  has_many :price_data
 
   @total_days = Stats.all.size
 
@@ -32,17 +14,17 @@ class Stats < ApplicationRecord
   end
 
   def self.count_breach_fh
-      high = period_hash.except(:A, :B)
-      low = period_hash.except(:A, :B)
-      either = period_hash.except(:A, :B)
-      x = {
+      high = empty_periods_hash.except(:A, :B)
+      low = empty_periods_hash.except(:A, :B)
+      either = empty_periods_hash.except(:A, :B)
+      day = {
         both: 0,
         none: 0
       }
 
     Stats.all.each do |s|
       if s.breach_fhh.present? && s.breach_fhl.present?
-        x[:both] += 1
+        day[:both] += 1
         if s.breach_fhh < s.breach_fhl
           either[s.breach_fhh.to_sym] += 1
         else
@@ -55,7 +37,7 @@ class Stats < ApplicationRecord
         low[s.breach_fhl.to_sym] += 1
         either[s.breach_fhl.to_sym] += 1
       else
-        x[:none] += 1
+        day[:none] += 1
       end
     end
 
@@ -66,15 +48,15 @@ class Stats < ApplicationRecord
       low: hash_to_percentage(low),
       either_acc: hash_to_percentage(accumulate_periods(either)),
       either: hash_to_percentage(either),
-      x: hash_to_percentage(x)
+      day: hash_to_percentage(day)
     }
   end
 
   def self.count_breach_on
-    high = period_hash
-    low = period_hash
-    either = period_hash
-    x = {
+    high = empty_periods_hash
+    low = empty_periods_hash
+    either = empty_periods_hash
+    day = {
       both: 0,
       none: 0
     }
@@ -83,7 +65,7 @@ class Stats < ApplicationRecord
     sh = s.breach_onh
     sl = s.breach_onl
     if sh.present? && sl.present?
-        x[:both] += 1
+        day[:both] += 1
       high[sh.to_sym] += 1
       low[sl.to_sym] += 1
       if sh < sl
@@ -98,12 +80,9 @@ class Stats < ApplicationRecord
       low[sl.to_sym] += 1
       either[sl.to_sym] += 1
     else
-      x[:none] += 1
+      day[:none] += 1
     end
   end
-
-
-
 
   breach_on = {
     high_acc: hash_to_percentage(accumulate_periods(high)),
@@ -112,42 +91,9 @@ class Stats < ApplicationRecord
     low: hash_to_percentage(low),
     either_acc: hash_to_percentage(accumulate_periods(either)),
     either: hash_to_percentage(either),
-    x: hash_to_percentage(x)
+    day: hash_to_percentage(day)
   }
 end
-
-# def self.count_breach_a
-#   either = 0
-#   both = 0
-#   high = []
-#   low = []
-
-#   Stats.all.each do |s|
-#     if s.breach_ah.present? && s.breach_al.present?
-#       either += 1
-#       both += 1
-#       high << s.breach_ah.to_f
-#       low << s.breach_al.to_f
-#     elsif s.breach_ah.present?
-#       either += 1
-#       high << s.breach_ah.to_f
-#     elsif s.breach_al.present?
-#       either += 1
-#       low << s.breach_al.to_f
-#     end
-
-#   end
-
-#   high = { count: percent_of_total(high.size), avg: mean_ticks(high) }
-#   low = { count: percent_of_total(low.size), avg: mean_ticks(low) }
-
-#   breach_a = {
-#     either: percent_of_total(either),
-#     both: percent_of_total(both),
-#     high: high,
-#     low: low
-#   }
-# end
 
 def self.count_breach_a
   either = []
