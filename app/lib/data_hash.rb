@@ -38,6 +38,12 @@ module DataHash
     }
   end
 
+  def add_accum_stats_hash(hash)
+    hash.each do |k, v|
+      hash[k] = accumulate_periods(v)
+    end
+  end
+
   # def empty_stat_hash
   #   stats = {
   #     period: empty_stat_hash_periods,

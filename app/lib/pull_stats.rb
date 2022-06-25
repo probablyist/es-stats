@@ -20,15 +20,25 @@ module PullStats
     return day, period, accum
   end
 
+  # def count_breach
+  #   hash = empty_periods_hash
+  #   hash.each do |k, v|
+  #     hash[k] = Stats.where(breach_fhl: k.to_s).size
+  #   end
+  # end
 
-  def add_accum_stats_hash(hash)
+  def count_breach
+    hash = empty_periods_hash
     hash.each do |k, v|
-      hash[k] = accumulate_periods(v)
+      hash[k] = get_breach_fhl(k).size
     end
   end
 
-  def accumulate_periods_x
-    sum = 0
-    transform_values { |v| sum += v }
+  def get_breach_fhl(period)
+    Stats.where("breach_fhl = ?", period.to_s)
+  end
+
+  def fhhl_breaches
+    breach_fhl = count_breach
   end
 end

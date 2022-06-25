@@ -4,7 +4,17 @@ class Stats < ApplicationRecord
 
   has_many :price_data
 
-  @total_days = Stats.all.size
+  scope :last_num_months, ->(date) { where("trading_day >= ?", date) }
+  scope :count_breach_fhh_sc, ->(period) { where("breach_fhh = ?", period.to_s).size }
+  scope :count_breach_fhl_sc, ->(period) { where("breach_fhl = ?", period.to_s).size }
+  scope :count_breach_both_sc, -> { where.not(breach_fhh: nil).where.not(breach_fhl: nil).size }
+  scope :count_breach_either_sc, -> { where.not(breach_fhh: nil).or(Stats.where.not(breach_fhl: nil)).size }
+
+  def initialize
+    @last_trading_day = Stats.all.order(:trading_day).last.trading_day
+    @six_months_from_last = @last_trading_day.months_ago(6)
+    @total_days = Stats.all.size
+  end
 
   def self.all_stats
     all = {
