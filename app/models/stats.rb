@@ -148,9 +148,9 @@ end
 
 def self.hash_to_percentage(hash)
   p hash
-  hash.each do |k, v|
-    hash[k] = percent_of_total(v) #unless hash[k].blank?
-  end
+  # hash.each do |k, v|
+  #   hash[k] = percent_of_total(v) #unless hash[k].blank?
+  # end
   hash
 end
 
@@ -158,10 +158,10 @@ def self.percent_of_total(num)
   ActiveSupport::NumberHelper.number_to_percentage(num.to_f / @total_days * 100, precision: 2)
 end
 
-def self.accumulate_periods(hash)
-  sum = 0
-  hash.transform_values { |v| sum += v }
-end
+# def self.accumulate_periods(hash)
+#   sum = 0
+#   hash.transform_values { |v| sum += v }
+# end
 
 def self.mean_ticks(array)
   mean = array.sum(0.0) / array.size
