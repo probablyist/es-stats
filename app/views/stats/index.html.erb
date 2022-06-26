@@ -1,10 +1,12 @@
 <p style="color: green"><%= notice %></p>
 
+<% @last_trading_day = @stats.last.trading_day %>
+<% @months_from_last = @last_trading_day.months_ago(6) %>
+
 <h1>Stats</h1>
 <h2>Overnight Breach</h2>
 <%= render "onhl" %>
 
-<h2>First hour breach</h2>
 <%= render "fhhl" %>
 
 <h2>A period breach in B period</h2>

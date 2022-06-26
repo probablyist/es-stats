@@ -1,23 +1,65 @@
-<% @last_trading_day = @stats.last.trading_day %>
-<% @months_from_last = @last_trading_day.months_ago(6) %>
+
 <% @fhhl_stats = @stats.last_num_months(@months_from_last) %>
-<table title="Daily FH Breachs">
-  <thead>
-    <th>Breach at least One Side</th>
-    <th>Breach Both Sides</th>
-    <th>Breach High</th>
-    <th>Breach Low</th>
-  </thead>
-  <tr>
-    <td><%= number_to_percentage(@stats.count_breach_either_sc.to_f / @stats.all.size.to_f * 100, precision: 2) %></td>
-   <td><%= @stats.count_breach_either_sc.as_percent_of(@stats.all.size) %></td>
-
-  </tr>
-  <tr><td><%= @fhhl_stats.size %></td>
-  <td><%= x = @fhhl_stats.accum_count_breach_fhh_to_hash %></td></tr>
-   <tr><td><%= @fhhl_stats.size %></td>
-  <td><%= y = @fhhl_stats.count_breach_fhh_to_hash %></td>
+<% @total_days = @fhhl_stats.size %>
+<% @fhhl_day_stats_hash = @fhhl_stats.fhhl_day_stats(@total_days) %>
+<%= @fhhl_period_stats_hash = @fhhl_stats.fhhl_period_stats(@total_days) %>
 
 
-  </tr>
-</table>
+<div class="container daily">
+  <h2>Initial Balance (Daily Statistics)<br>
+    <small>Chance of breaking initial balance during the day</small></h2>
+  <table class="responsive-table">
+    <thead class="table-header">
+      <th class="row-header">Chance during day</th>
+      <th class="col-both">Breach both side</th>
+      <th class="col-either">Breach at least one side</th>
+    </thead>
+    <tbody>
+      <tr class="table-row">
+        <td class="row-header">Last 6 months</td>
+        <td class="col-both"><%= @fhhl_day_stats_hash[:fhhl_both] %></td>
+        <td class="col-either"><%= @fhhl_day_stats_hash[:fhhl_either] %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="container period">
+  <h2>Initial Balance (Period Statistics)<br>
+    <small>Chance by period of breaking initial balance</small></h2>
+    <table class="responsive-table">
+      <thead class="table-header">
+        <th class="col row-header">Period Chance</th>
+        <% @fhhl_period_stats_hash[:fhh_period].each do |k, v| %>
+          <th class="col col-<%= k %>"><%= k %></th>
+        <% end %>
+      </thead>
+      <tbody>
+        <tr class="table-row">
+          <td class="col row-header">Breach High</td>
+            <% @fhhl_period_stats_hash[:fhh_period].each do |k, v| %>
+            <td class="col col-<%= k %>"><%= v %></td>
+          <% end %>
+        </tr>
+        <tr class="table-row">
+          <td class="col row-header">Breach Low</td>
+            <% @fhhl_period_stats_hash[:fhl_period].each do |k, v| %>
+            <td class="col col-<%= k %>"><%= v %></td>
+          <% end %>
+        </tr>
+        <tr class="table-row">
+          <td class="col row-header">Cummulative <br> Breach High</td>
+            <% @fhhl_period_stats_hash[:acc_fhh].each do |k, v| %>
+            <td class="col col-<%= k %>"><%= v %></td>
+          <% end %>
+        </tr>
+        <tr class="table-row">
+          <td class="col row-header">Cummulative <br> Breach Low</td>
+            <% @fhhl_period_stats_hash[:acc_fhl].each do |k, v| %>
+            <td class="col col-<%= k %>"><%= v %></td>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+</div>
