@@ -1,5 +1,4 @@
-module PullStats
-
+module FhhlHash
 
   def fhhl_stats_hash
     fhhl_stats = {
@@ -31,14 +30,6 @@ module PullStats
     end
   end
 
-  def accum_count_breach_fhh_to_hash
-    accumulate_periods(count_breach_fhh_to_hash)
-  end
-
-  def accum_count_breach_fhl_to_hash
-    accumulate_periods(count_breach_fhl_to_hash)
-  end
-
   def count_breach_fhl_to_hash
     hash = empty_periods_hash.except(:A, :B)
     hash.each do |k, v|
@@ -46,21 +37,11 @@ module PullStats
     end
   end
 
-  def accumulate_periods(hash)
-    sum = 0
-    hash.transform_values { |v| sum += v }
+  def accum_count_breach_fhh_to_hash
+    accumulate_periods(count_breach_fhh_to_hash)
   end
 
-  def hash_to_percent(hash, total)
-    hash.each do |k, v|
-      hash[k] = as_percent_of(v, total) #unless hash[k].blank?
-    end
-    hash
+  def accum_count_breach_fhl_to_hash
+    accumulate_periods(count_breach_fhl_to_hash)
   end
-
-  def as_percent_of(numerator, denominator)
-    ActiveSupport::NumberHelper.number_to_percentage(numerator.to_f / denominator.to_f * 100, precision: 2)
-  end
-
-
 end

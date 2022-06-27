@@ -1,6 +1,8 @@
 class Stats < ApplicationRecord
-  extend DataHash
-  extend PullStats
+  extend StatsHash
+  extend FhhlHash
+  extend OnhlHash
+  extend AToBHash
 
   has_many :price_data
 
@@ -9,6 +11,14 @@ class Stats < ApplicationRecord
   scope :count_breach_fhl_sc, ->(period) { where("breach_fhl = ?", period.to_s).size }
   scope :count_breach_both_sc, -> { where.not(breach_fhh: nil).where.not(breach_fhl: nil).size }
   scope :count_breach_either_sc, -> { where.not(breach_fhh: nil).or(Stats.where.not(breach_fhl: nil)).size }
+  scope :count_breach_onh_sc, ->(period) { where("breach_onh = ?", period.to_s).size }
+  scope :count_breach_onl_sc, ->(period) { where("breach_onl = ?", period.to_s).size }
+  scope :count_breach_onhl_both_sc, -> { where.not(breach_onh: nil).where.not(breach_onl: nil).size }
+  scope :count_breach_onhl_either_sc, -> { where.not(breach_onh: nil).or(Stats.where.not(breach_onl: nil)).size }
+  scope :breach_ah_sc, -> { where.not(breach_ah: nil) }
+  scope :breach_al_sc, -> { where.not(breach_al: nil) }
+  scope :count_breach_ab_both_sc, -> { where.not(breach_ah: nil).where.not(breach_al: nil) }
+  scope :count_breach_ab_either_sc, -> { where.not(breach_ah: nil).or(Stats.where.not(breach_al: nil)) }
 
   def initialize
     @last_trading_day = Stats.all.order(:trading_day).last.trading_day

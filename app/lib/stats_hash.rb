@@ -1,4 +1,4 @@
-module DataHash
+module StatsHash
 
   def empty_periods_hash
     period_hash = {
@@ -17,6 +17,12 @@ module DataHash
       M: 0,
       N: 0,
       O: 0
+    }
+  end
+
+  def empty_b_period_hash
+    b_period = {
+      B: 0
     }
   end
 
@@ -44,11 +50,20 @@ module DataHash
     end
   end
 
-  # def empty_stat_hash
-  #   stats = {
-  #     period: empty_stat_hash_periods,
-  #     day: empty_stat_hash_days
-  #   }
-  # end
+  def accumulate_periods(hash)
+    sum = 0
+    hash.transform_values { |v| sum += v }
+  end
+
+  def hash_to_percent(hash, total)
+    hash.each do |k, v|
+      hash[k] = as_percent_of(v, total) #unless hash[k].blank?
+    end
+    hash
+  end
+
+  def as_percent_of(numerator, denominator)
+    ActiveSupport::NumberHelper.number_to_percentage(numerator.to_f / denominator.to_f * 100, precision: 2)
+  end
 
 end

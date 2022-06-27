@@ -3,33 +3,10 @@
 <% @last_trading_day = @stats.last.trading_day %>
 <% @months_from_last = @last_trading_day.months_ago(6) %>
 
-<h1>Stats</h1>
-<h2>Overnight Breach</h2>
+
+
 <%= render "onhl" %>
-
 <%= render "fhhl" %>
-
-<h2>A period breach in B period</h2>
 <%= render "b_to_a" %>
 
-<div id="stats">
-  <table>
 
-  <thead>
-    <tr>
-      <th>Trading day</th>
-      <th>Breach onh</th>
-      <th>Breach onl</th>
-      <th>Breach fhh</th>
-      <th>Breach fhl</th>
-      <th>Beach ah</th>
-      <th>Breach al</th>
-    </tr>
-  </thead>
-    <% @stats.each do |stat| %>
-      <%= render stat %>
-    <% end %>
-  </table>
-</div>
-
-<%= link_to "New stats", new_stat_path %>

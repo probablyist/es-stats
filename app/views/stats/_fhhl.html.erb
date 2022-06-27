@@ -2,17 +2,17 @@
 <% @fhhl_stats = @stats.last_num_months(@months_from_last) %>
 <% @total_days = @fhhl_stats.size %>
 <% @fhhl_day_stats_hash = @fhhl_stats.fhhl_day_stats(@total_days) %>
-<%= @fhhl_period_stats_hash = @fhhl_stats.fhhl_period_stats(@total_days) %>
+<% @fhhl_period_stats_hash = @fhhl_stats.fhhl_period_stats(@total_days) %>
 
 
 <div class="container daily">
   <h2>Initial Balance (Daily Statistics)<br>
-    <small>Chance of breaking initial balance during the day</small></h2>
+    <small>Chance of breaking initial balance during regular trading hours</small></h2>
   <table class="responsive-table">
     <thead class="table-header">
-      <th class="row-header">Chance during day</th>
-      <th class="col-both">Breach both side</th>
-      <th class="col-either">Breach at least one side</th>
+      <th class="row-header fhhl">Chance during day</th>
+      <th class="col-both fhhl">Breach both side</th>
+      <th class="col-either fhhl">Breach at least one side</th>
     </thead>
     <tbody>
       <tr class="table-row">
@@ -29,10 +29,11 @@
   <h2>Initial Balance (Period Statistics)<br>
     <small>Chance by period of breaking initial balance</small></h2>
     <table class="responsive-table">
+      <caption>30 minute TPO periods at 8:30 CST</caption>
       <thead class="table-header">
-        <th class="col row-header">Period Chance</th>
+        <th class="col row-header fhhl">Period Chance</th>
         <% @fhhl_period_stats_hash[:fhh_period].each do |k, v| %>
-          <th class="col col-<%= k %>"><%= k %></th>
+          <th class="col col-<%= k %> fhhl"><%= k %></th>
         <% end %>
       </thead>
       <tbody>

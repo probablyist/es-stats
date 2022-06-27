@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>EsStats</title>
+    <title>Es Stats</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,6 +11,14 @@
   </head>
 
   <body>
+    <div class="header">
+      <h1>ES Stats<br>
+        <small>Statistics as of <%= @last_trading_day.strftime("%A, %B %d %Y") %></small>
+      </h1>
+    </div>
     <%= yield %>
+    <div class="footer">
+      <p>Site by Paul Probst, 2022</p>
+    </div>
   </body>
 </html>

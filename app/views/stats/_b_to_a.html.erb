@@ -1,0 +1,39 @@
+<% @b_to_a_stats = @stats.last_num_months(@months_from_last) %>
+<% @total_days = @b_to_a_stats.size %>
+<% @b_to_a_stats_hash = @b_to_a_stats.a_to_b_stats_hash(@total_days) %>
+
+
+<div class="container">
+  <h2>B to A<br>
+    <small>Chance of breaking A period high or low during B period</small>
+  </h2>
+  <table class="responsive-table">
+    <thead class="table-header">
+      <th class="row-header b_to_a">Chance during day</th>
+      <th class="col-both b_to_a">Breach Chance</th>
+      <th class="col-either b_to_a">Avg Excursion (Points)</th>
+    </thead>
+    <tbody>
+      <tr class="table-row">
+        <td class="row-header">Breach High</td>
+        <td class="col-both"><%= @b_to_a_stats_hash[:breach_high] %></td>
+        <td class="col-either"><%= @b_to_a_stats_hash[:breach_high_avg] %></td>
+      </tr>
+      <tr class="table-row">
+        <td class="row-header">Breach Low</td>
+        <td class="col-both"><%= @b_to_a_stats_hash[:breach_low] %></td>
+        <td class="col-either"><%= @b_to_a_stats_hash[:breach_low_avg] %></td>
+      </tr>
+      <tr class="table-row">
+        <td class="row-header">Breach Both Sides</td>
+        <td class="col-both"><%= @b_to_a_stats_hash[:breach_both] %></td>
+        <td class="col-either"><%= @b_to_a_stats_hash[:breach_both_avg] %></td>
+      </tr>
+      <tr class="table-row">
+        <td class="row-header">Breach Either Side</td>
+        <td class="col-both"><%= @b_to_a_stats_hash[:breach_either] %></td>
+        <td class="col-either"><%= @b_to_a_stats_hash[:breach_either_avg] %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
