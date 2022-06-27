@@ -4,7 +4,7 @@ class Stats < ApplicationRecord
   extend OnhlHash
   extend BToAHash
 
-  has_many :price_data
+  validates :trading_day, uniqueness: true
 
   scope :last_num_months, ->(date) { where("trading_day >= ?", date) }
   scope :count_breach_fhh_sc, ->(period) { where("breach_fhh = ?", period.to_s).size }
@@ -20,8 +20,9 @@ class Stats < ApplicationRecord
   scope :count_breach_ab_both_sc, -> { where.not(breach_ah: nil).where.not(breach_al: nil) }
   scope :count_breach_ab_either_sc, -> { where.not(breach_ah: nil).or(Stats.where.not(breach_al: nil)) }
 
-  ##### UPDATE FIELDS #####
-  def self.update_breaches
+  ##### Add data from PriceData table #####
+  def self.populate_data_from_price_data_table
+    add_trading_days_to_table
     add_breach_onh
     add_breach_onl
     add_breach_fhh

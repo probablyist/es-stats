@@ -1,5 +1,6 @@
 class PriceData < ApplicationRecord
-belongs_to :stats
+  validates :date_time, uniqueness: true
+
   enum :period, %i[A B C D E F G H I J K L M N O]
 
   scope :rth_only, -> { where(trading_session: "RTH") }
@@ -8,10 +9,12 @@ belongs_to :stats
   scope :a_period, -> { where(period: "A") }
   scope :b_period, -> { where(period: "B") }
 
+  # Downloads data from online CSV and populated fields
   def self.download_update_all
-    # load_csv_to_db
+    load_csv_to_db
     set_trading_day
     set_trading_session
+    set_period
     set_fhh
     set_fhl
     set_onh
