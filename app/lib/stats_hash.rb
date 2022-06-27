@@ -20,30 +20,6 @@ module StatsHash
     }
   end
 
-  def empty_b_period_hash
-    b_period = {
-      B: 0
-    }
-  end
-
-  def empty_stat_hash_periods
-    period_stats = {
-      high: empty_periods_hash,
-      low: empty_periods_hash,
-      either: empty_periods_hash,
-      both: empty_periods_hash
-    }
-  end
-
-  def empty_stat_hash_days
-    day_stats = {
-      high: 0,
-      low: 0,
-      either: 0,
-      both: 0
-    }
-  end
-
   def add_accum_stats_hash(hash)
     hash.each do |k, v|
       hash[k] = accumulate_periods(v)
@@ -57,7 +33,7 @@ module StatsHash
 
   def hash_to_percent(hash, total)
     hash.each do |k, v|
-      hash[k] = as_percent_of(v, total) #unless hash[k].blank?
+      hash[k] = as_percent_of(v, total)
     end
     hash
   end

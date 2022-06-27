@@ -2,7 +2,7 @@ class Stats < ApplicationRecord
   extend StatsHash
   extend FhhlHash
   extend OnhlHash
-  extend AToBHash
+  extend BToAHash
 
   has_many :price_data
 
@@ -19,12 +19,6 @@ class Stats < ApplicationRecord
   scope :breach_al_sc, -> { where.not(breach_al: nil) }
   scope :count_breach_ab_both_sc, -> { where.not(breach_ah: nil).where.not(breach_al: nil) }
   scope :count_breach_ab_either_sc, -> { where.not(breach_ah: nil).or(Stats.where.not(breach_al: nil)) }
-
-  def initialize
-    @last_trading_day = Stats.all.order(:trading_day).last.trading_day
-    @six_months_from_last = @last_trading_day.months_ago(6)
-    @total_days = Stats.all.size
-  end
 
   def self.all_stats
     all = {

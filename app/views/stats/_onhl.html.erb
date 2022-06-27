@@ -8,7 +8,7 @@
 <div class="container daily">
   <h2>Overnight High/Low (Daily Statistics)<br>
     <small>Chance of breaking overnight high or low during regular trading hours</small></h2>
-  <table class="responsive-table">
+  <table>
     <thead class="table-header">
       <th class="row-header onhl">Chance during day</th>
       <th class="col-both onhl">Breach both side</th>
@@ -28,37 +28,37 @@
 <div class="container period">
   <h2>Overnight High/Low (Period Statistics)<br>
     <small>Chance by period of overnight high or low</small></h2>
-    <table class="responsive-table">
+    <table>
       <caption>30 minute TPO periods at 8:30 CST</caption>
       <thead class="table-header">
-        <th class="col row-header onhl">Period Chance</th>
+        <th class="row-header onhl">Period Chance</th>
         <% @onhl_period_stats_hash[:onh_period].each do |k, v| %>
-          <th class="col col-<%= k %> onhl"><%= k %></th>
+          <th class="col-<%= k %> onhl"><%= k %></th>
         <% end %>
       </thead>
       <tbody>
         <tr class="table-row">
-          <td class="col row-header">Breach High</td>
+          <td class="row-header">Breach High</td>
             <% @onhl_period_stats_hash[:onh_period].each do |k, v| %>
-            <td class="col col-<%= k %>"><%= v %></td>
+            <td class="col-<%= k %>"><%= v %></td>
           <% end %>
         </tr>
         <tr class="table-row">
-          <td class="col row-header">Breach Low</td>
+          <td class="row-header">Breach Low</td>
             <% @onhl_period_stats_hash[:onl_period].each do |k, v| %>
-            <td class="col col-<%= k %>"><%= v %></td>
+            <td class="col-<%= k %>"><%= v %></td>
           <% end %>
         </tr>
         <tr class="table-row">
-          <td class="col row-header">Cummulative <br> Breach High</td>
+          <td class="row-header">Cummulative <br> Breach High</td>
             <% @onhl_period_stats_hash[:acc_onh].each do |k, v| %>
-            <td class="col col-<%= k %>"><%= v %></td>
+            <td class="col-<%= k %>"><%= v %></td>
           <% end %>
         </tr>
         <tr class="table-row">
-          <td class="col row-header">Cummulative <br> Breach Low</td>
+          <td class="row-header">Cummulative <br> Breach Low</td>
             <% @onhl_period_stats_hash[:acc_onl].each do |k, v| %>
-            <td class="col col-<%= k %>"><%= v %></td>
+            <td class="col-<%= k %>"><%= v %></td>
           <% end %>
         </tr>
       </tbody>

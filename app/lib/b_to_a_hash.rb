@@ -1,6 +1,7 @@
-module AToBHash
+module BToAHash
 
-  def a_to_b_stats_hash(total)
+  # Build hash containing stats for B to A
+  def b_to_a_stats_hash(total)
     period = {
       breach_high: as_percent_of(self.breach_ah_sc.size, total),
       breach_high_avg: mean_ticks(breach_ah_to_array),
