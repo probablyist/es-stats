@@ -42,4 +42,9 @@ module StatsHash
     ActiveSupport::NumberHelper.number_to_percentage(numerator.to_f / denominator.to_f * 100, precision: 2)
   end
 
+  def mean_ticks(array)
+    mean = array.sum(0.0) / array.size
+    mean = (mean * 4).round / 4.0
+  end
+
 end
